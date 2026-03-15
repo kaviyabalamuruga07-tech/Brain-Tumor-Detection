@@ -1,0 +1,122 @@
+[
+  {
+    "filename": "gg_36.jpg",
+    "result": "Tumor Detected",
+    "label": "tumor",
+    "confidence": 52.3,
+    "risk_level": "Low Risk",
+    "timestamp": "15-03-2026 17:35"
+  },
+  {
+    "filename": "gg_10.jpg",
+    "result": "Tumor Detected",
+    "label": "tumor",
+    "confidence": 53.22,
+    "risk_level": "Low Risk",
+    "timestamp": "15-03-2026 17:33"
+  },
+  {
+    "filename": "3.jpg",
+    "result": "No Tumor Detected",
+    "label": "no_tumor",
+    "confidence": 51.29,
+    "risk_level": "Low Risk",
+    "timestamp": "15-03-2026 17:33"
+  },
+  {
+    "filename": "1.jpg",
+    "result": "No Tumor Detected",
+    "label": "no_tumor",
+    "confidence": 56.76,
+    "risk_level": "Low Risk",
+    "timestamp": "15-03-2026 17:29"
+  },
+  {
+    "filename": "gg_1.jpg",
+    "result": "Tumor Detected",
+    "label": "tumor",
+    "confidence": 53.43,
+    "risk_level": "Low Risk",
+    "timestamp": "15-03-2026 17:28"
+  },
+  {
+    "filename": "gg_4.jpg",
+    "result": "Tumor Detected",
+    "label": "tumor",
+    "confidence": 53.18,
+    "risk_level": "Low Risk",
+    "timestamp": "15-03-2026 17:26"
+  },
+  {
+    "filename": "13.jpg",
+    "result": "No Tumor Detected",
+    "label": "no_tumor",
+    "confidence": 58.64,
+    "risk_level": "Low Risk",
+    "timestamp": "15-03-2026 17:25"
+  },
+  {
+    "filename": "2.jpg",
+    "result": "No Tumor Detected",
+    "label": "no_tumor",
+    "confidence": 50.22,
+    "risk_level": "Low Risk",
+    "timestamp": "15-03-2026 17:25"
+  },
+  {
+    "filename": "1.jpg",
+    "result": "No Tumor Detected",
+    "label": "no_tumor",
+    "confidence": 56.76,
+    "risk_level": "Low Risk",
+    "timestamp": "15-03-2026 17:23"
+  },
+  {
+    "filename": "gg_1.jpg",
+    "result": "Tumor Detected",
+    "label": "tumor",
+    "confidence": 53.43,
+    "risk_level": "Low Risk",
+    "timestamp": "13-03-2026 15:48"
+  },
+  {
+    "filename": "gg_1.jpg",
+    "result": "Tumor Detected",
+    "label": "tumor",
+    "confidence": 53.43,
+    "risk_level": "Low Risk",
+    "timestamp": "13-03-2026 15:47"
+  },
+  {
+    "filename": "gg_1.jpg",
+    "result": "Tumor Detected",
+    "label": "tumor",
+    "confidence": 53.43,
+    "risk_level": "Low Risk",
+    "timestamp": "13-03-2026 14:44"
+  },
+  {
+    "filename": "1.jpg",
+    "result": "No Tumor Detected",
+    "label": "no_tumor",
+    "confidence": 56.76,
+    "risk_level": "Low Risk",
+    "timestamp": "13-03-2026 14:43"
+  },
+  {
+    "filename": "3.jpg",
+    "result": "No Tumor Detected",
+    "label": "no_tumor",
+    "confidence": 51.29,
+    "risk_level": "Low Risk",
+    "timestamp": "13-03-2026 14:41"
+  },
+  {
+    "filename": "gg_1.jpg",
+    "result": "Tumor Detected",
+    "label": "tumor",
+    "confidence": 53.43,
+    "risk_level": "Low Risk",
+    "timestamp": "13-03-2026 14:41"
+  }
+]

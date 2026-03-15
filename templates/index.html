@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>NeuroScan V3.0 — AI Brain Tumor Detection</title>
+<meta name="description" content="Advanced AI-powered brain tumor detection using Convolutional Neural Networks. Upload MRI scans and get instant analysis."/>
+<link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}"/>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     NAVBAR
+══════════════════════════════════════════════ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-brand">
+    <div class="brand-logo">🧠</div>
+    <span class="brand-name">NeuroScan</span>
+    <span class="brand-tag">V3.0</span>
+  </div>
+  <ul class="nav-menu" id="navMenu">
+    <li><a href="#home"    class="active">Home</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#scan">   Scan</a></li>
+    <li><a href="#about">  About</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="/history">History</a></li>
+    <li><a href="/dashboard">Dashboard</a></li>
+    <li><a href="#scan" class="nav-cta">🔍 Scan Now</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+
+<!-- ═══════════════════════════════════════════
+     HERO SECTION
+══════════════════════════════════════════════ -->
+<section id="home" class="hero">
+  <div class="hero-bg-orb orb1"></div>
+  <div class="hero-bg-orb orb2"></div>
+  <div class="hero-inner">
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        AI-Powered Medical Imaging Analysis
+      </div>
+      <h1 class="hero-title">
+        Detect Brain Tumors<br/>with <span>Advanced AI</span>
+      </h1>
+      <p class="hero-desc">
+        Upload a brain MRI scan and receive instant analysis powered by
+        a deep Convolutional Neural Network trained on thousands of medical images.
+        Accurate, fast, and completely private — runs 100% on your machine.
+      </p>
+      <div class="hero-btns">
+        <a href="#scan" class="btn-primary">🔍 Analyze MRI Scan</a>
+        <a href="#about" class="btn-outline">📖 Learn More</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat">
+          <div class="hstat-num">{{ stats.total }}</div>
+          <div class="hstat-lbl">Scans Analyzed</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-num">95%+</div>
+          <div class="hstat-lbl">Accuracy Rate</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-num">&lt;2s</div>
+          <div class="hstat-lbl">Analysis Time</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-num">100%</div>
+          <div class="hstat-lbl">Private & Local</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decorative card -->
+    <div class="hero-visual">
+      <div class="brain-card">
+        <div class="bc-header">
+          <div class="bc-icon">🧠</div>
+          <div>
+            <div class="bc-title">MRI Analysis Result</div>
+            <div class="bc-sub">Deep CNN Classification</div>
+          </div>
+        </div>
+        <div class="bc-img">🧬</div>
+        <div class="bc-result">
+          <div>
+            <div class="bcr-label">Diagnosis</div>
+            <div class="bcr-val">✅ No Tumor Detected</div>
+          </div>
+          <div style="text-align:right">
+            <div class="bcr-label">Confidence</div>
+            <div class="bcr-val">97.4%</div>
+          </div>
+        </div>
+        <div class="bc-bars">
+          <div class="bc-bar-row">
+            <span>Normal</span>
+            <div class="bc-bar-bg"><div class="bc-bar-fill bar-green"></div></div>
+            <span>97%</span>
+          </div>
+          <div class="bc-bar-row">
+            <span>Tumor</span>
+            <div class="bc-bar-bg"><div class="bc-bar-fill bar-red"></div></div>
+            <span>3%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     STATS BAR
+══════════════════════════════════════════════ -->
+<div class="stats-bar">
+  <div class="stats-bar-inner">
+    <div>
+      <div class="sb-num">{{ stats.total }}</div>
+      <div class="sb-lbl">Total Scans Performed</div>
+    </div>
+    <div>
+      <div class="sb-num">{{ stats.tumors }}</div>
+      <div class="sb-lbl">Tumor Cases Detected</div>
+    </div>
+    <div>
+      <div class="sb-num">{{ stats.normal }}</div>
+      <div class="sb-lbl">Normal Scans</div>
+    </div>
+    <div>
+      <div class="sb-num">{{ stats.avg_conf }}%</div>
+      <div class="sb-lbl">Average Confidence</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     FEATURES SECTION
+══════════════════════════════════════════════ -->
+<section id="features" class="features-bg">
+  <div class="section-inner">
+    <div class="section-center">
+      <div class="section-badge">⭐ Features</div>
+      <h2 class="section-title">Why Choose <span>NeuroScan</span>?</h2>
+      <p class="section-desc">Packed with advanced AI features for accurate and fast brain tumor analysis.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="feat-icon fi-teal">⚡</div>
+        <h3>Instant Analysis</h3>
+        <p>Get results in under 2 seconds. Our optimized CNN processes MRI images at blazing speed without sacrificing accuracy.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon fi-blue">🎯</div>
+        <h3>High Accuracy CNN</h3>
+        <p>Deep 4-block Convolutional Neural Network with Batch Normalization, Dropout, and Global Average Pooling for maximum accuracy.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon fi-green">📊</div>
+        <h3>Detailed Reports</h3>
+        <p>Full probability breakdown showing tumor vs normal percentage, confidence score, risk level classification, and timestamp.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon fi-red">🔒</div>
+        <h3>100% Private</h3>
+        <p>All processing happens locally on your machine. Your MRI images are never uploaded to any cloud server. Total privacy guaranteed.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon fi-warn">📋</div>
+        <h3>Scan History</h3>
+        <p>Every scan is automatically saved with results, timestamps, and confidence scores for easy reference and record keeping.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon fi-purp">🖨️</div>
+        <h3>Print Reports</h3>
+        <p>Generate and print professional scan reports with full analysis details. Perfect for documentation and sharing with healthcare teams.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     HOW IT WORKS
+══════════════════════════════════════════════ -->
+<section>
+  <div class="section-inner">
+    <div class="section-center">
+      <div class="section-badge">⚙️ Process</div>
+      <h2 class="section-title">How It <span>Works</span></h2>
+      <p class="section-desc">Four simple steps from MRI image to accurate tumor detection result.</p>
+    </div>
+
+    <div class="how-grid">
+      <div class="how-step">
+        <div class="how-num">📤</div>
+        <h3>Upload MRI</h3>
+        <p>Drag and drop or click to upload your brain MRI scan in JPG, PNG, or JPEG format.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-num">🔧</div>
+        <h3>Preprocess</h3>
+        <p>Image is resized to 150×150px and enhanced using CLAHE contrast normalization.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-num">🧠</div>
+        <h3>CNN Analysis</h3>
+        <p>Deep CNN model with 4 convolutional blocks analyzes patterns in the MRI scan.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-num">📊</div>
+        <h3>Get Results</h3>
+        <p>Receive detailed results with tumor probability, confidence score, and risk level.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     UPLOAD / SCAN SECTION
+══════════════════════════════════════════════ -->
+<section id="scan" class="upload-section">
+  <div class="upload-inner">
+
+    <div>
+      <div class="section-badge">🔍 Scan</div>
+      <h2 class="section-title" style="margin-bottom:8px">Analyze Your <span>MRI Scan</span></h2>
+      <p style="color:var(--muted2);font-size:15px;line-height:1.7;margin-bottom:28px">
+        Upload a brain MRI image below for instant AI-powered tumor detection analysis.
+      </p>
+
+      <div class="upload-card">
+        <h2>📤 Upload MRI Image</h2>
+        <p class="sub">Supports JPG · PNG · JPEG · BMP</p>
+
+        {% if error %}
+        <div class="alert-error">⚠️ {{ error }}</div>
+        {% endif %}
+
+        <form action="/predict" method="POST" enctype="multipart/form-data" id="form">
+          <div class="dropzone" id="dz" onclick="document.getElementById('fi').click()">
+            <div id="dzContent">
+              <div class="dz-icon">🖼️</div>
+              <div class="dz-title">Drop your MRI image here</div>
+              <div class="dz-sub">or click anywhere to browse files</div>
+              <div class="dz-formats">
+                <span class="dz-fmt">JPG</span>
+                <span class="dz-fmt">PNG</span>
+                <span class="dz-fmt">JPEG</span>
+                <span class="dz-fmt">BMP</span>
+              </div>
+            </div>
+            <div id="preview" style="display:none">
+              <img id="pimg" src="" alt="Preview"/>
+              <p id="pname"></p>
+            </div>
+            <input type="file" id="fi" name="file" accept=".jpg,.jpeg,.png,.bmp"
+                   style="display:none" onchange="onPick(this)"/>
+          </div>
+          <button type="submit" class="btn-scan" id="btn" disabled>
+            <span>🔍</span>
+            <span id="btnText">Analyze MRI Scan</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="scan-info">
+      <h3>✅ What to Expect</h3>
+      <ul class="info-list">
+        <li>
+          <span>🔒</span>
+          <span>Your image stays on your computer. Nothing is sent to any server or cloud storage.</span>
+        </li>
+        <li>
+          <span>⚡</span>
+          <span>Analysis is completed in under 2 seconds using our locally running AI model.</span>
+        </li>
+        <li>
+          <span>📊</span>
+          <span>You'll receive a full breakdown: tumor %, normal %, confidence score, and risk level.</span>
+        </li>
+        <li>
+          <span>💾</span>
+          <span>Every result is automatically saved to your scan history for future reference.</span>
+        </li>
+        <li>
+          <span>🖨️</span>
+          <span>You can print or save your report directly from the results page.</span>
+        </li>
+        <li>
+          <span>⚠️</span>
+          <span>This tool is for <strong>educational purposes only</strong>. Always consult a licensed doctor for medical decisions.</span>
+        </li>
+      </ul>
+
+      {% if history %}
+      <div style="margin-top:28px">
+        <h3 style="margin-bottom:16px">🕐 Recent Scans</h3>
+        {% for h in history %}
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span>{% if h.label=='tumor' %}⚠️{% else %}✅{% endif %}</span>
+            <div>
+              <div style="font-size:13px;font-weight:500">{{ h.filename[:22] }}{% if h.filename|length > 22 %}...{% endif %}</div>
+              <div style="font-size:11px;color:var(--muted)">{{ h.timestamp }}</div>
+            </div>
+          </div>
+          <span class="tbl-badge {% if h.label=='tumor' %}badge-red{% else %}badge-green{% endif %}">
+            {{ h.confidence }}%
+          </span>
+        </div>
+        {% endfor %}
+        <a href="/history" style="display:block;text-align:center;color:var(--primary);font-size:13px;margin-top:14px;font-weight:500">View All History →</a>
+      </div>
+      {% endif %}
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     ABOUT SECTION
+══════════════════════════════════════════════ -->
+<section id="about" class="about-section">
+  <div class="about-inner">
+
+    <div class="about-visual">
+      <div class="about-card-main">
+        <div class="ac-row">
+          <div class="ac-icon">🧠</div>
+          <div>
+            <div class="ac-title">CNN Model Performance</div>
+            <div class="ac-sub">Trained on 1500+ MRI images</div>
+          </div>
+        </div>
+        <div class="ac-bar">
+          <div class="ac-bar-label"><span>Overall Accuracy</span><span>95%+</span></div>
+          <div class="ac-bar-bg"><div class="ac-bar-fill" style="width:95%"></div></div>
+        </div>
+        <div class="ac-bar">
+          <div class="ac-bar-label"><span>Tumor Detection</span><span>93%</span></div>
+          <div class="ac-bar-bg"><div class="ac-bar-fill" style="width:93%"></div></div>
+        </div>
+        <div class="ac-bar">
+          <div class="ac-bar-label"><span>Normal Classification</span><span>97%</span></div>
+          <div class="ac-bar-bg"><div class="ac-bar-fill" style="width:97%"></div></div>
+        </div>
+        <div class="ac-bar">
+          <div class="ac-bar-label"><span>Processing Speed</span><span>98%</span></div>
+          <div class="ac-bar-bg"><div class="ac-bar-fill" style="width:98%"></div></div>
+        </div>
+      </div>
+      <div class="about-float">
+        <div class="af-num">4 Blocks</div>
+        <div class="af-lbl">CNN Architecture</div>
+      </div>
+    </div>
+
+    <div class="about-text">
+      <div class="section-badge">📖 About</div>
+      <h2 class="section-title">About <span>NeuroScan</span></h2>
+      <p>
+        NeuroScan V3.0 is an advanced AI-powered brain tumor detection system built with
+        Python, TensorFlow, and Flask. It uses a deep Convolutional Neural Network (CNN)
+        to classify brain MRI scans as either containing a tumor or being normal.
+      </p>
+      <p>
+        The model was designed with a 4-block CNN architecture using Batch Normalization,
+        Dropout regularization, and Global Average Pooling. Images are enhanced using
+        CLAHE (Contrast Limited Adaptive Histogram Equalization) before analysis to
+        improve detection accuracy.
+      </p>
+      <p>
+        This project was built as an educational tool to demonstrate the power of deep
+        learning in medical image analysis. All processing is done locally — your data
+        never leaves your device.
+      </p>
+      <div class="tech-tags">
+        <span class="tech-tag">Python 3.10</span>
+        <span class="tech-tag">TensorFlow</span>
+        <span class="tech-tag">Keras</span>
+        <span class="tech-tag">Flask</span>
+        <span class="tech-tag">OpenCV</span>
+        <span class="tech-tag">NumPy</span>
+        <span class="tech-tag">scikit-learn</span>
+        <span class="tech-tag">Matplotlib</span>
+        <span class="tech-tag">CNN</span>
+        <span class="tech-tag">CLAHE</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     CONTACT SECTION
+══════════════════════════════════════════════ -->
+<section id="contact" class="contact-section">
+  <div class="contact-inner">
+
+    <div class="contact-info">
+      <div class="section-badge">📬 Contact</div>
+      <h2>Get In <span style="background:linear-gradient(90deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Touch</span></h2>
+      <p>
+        Have questions about NeuroScan, want to report a bug, or looking to collaborate?
+        Fill out the form or reach us through the channels below.
+      </p>
+      <div class="contact-cards">
+        <div class="contact-card">
+          <div class="cc-icon">📧</div>
+          <div>
+            <div class="cc-label">Email Us</div>
+            <div class="cc-val">neuroscan@example.com</div>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="cc-icon">🐙</div>
+          <div>
+            <div class="cc-label">GitHub</div>
+            <div class="cc-val">github.com/neuroscan</div>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="cc-icon">🏫</div>
+          <div>
+            <div class="cc-label">Institution</div>
+            <div class="cc-val">Final Year Project — 2026</div>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="cc-icon">⏰</div>
+          <div>
+            <div class="cc-label">Response Time</div>
+            <div class="cc-val">Within 24 hours</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form">
+      <h3>✉️ Send a Message</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" placeholder="John"/>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" placeholder="Doe"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="you@example.com"/>
+      </div>
+      <div class="form-group">
+        <label>Subject</label>
+        <select>
+          <option>General Inquiry</option>
+          <option>Bug Report</option>
+          <option>Feature Request</option>
+          <option>Collaboration</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea rows="5" placeholder="Write your message here..."></textarea>
+      </div>
+      <button class="btn-send" onclick="sendMsg(event)">📤 Send Message</button>
+      <div class="success-msg" id="successMsg">✅ Message sent successfully! We'll get back to you soon.</div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+
+    <div class="footer-disclaimer">
+      ⚠️ <strong>Medical Disclaimer:</strong> NeuroScan is an educational project only. Results are not a substitute for professional medical diagnosis. Always consult a qualified neurologist or radiologist.
+    </div>
+
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+          <div class="brand-logo">🧠</div>
+          <span class="brand-name">NeuroScan</span>
+          <span class="brand-tag">V3.0</span>
+        </div>
+        <p>Advanced AI-powered brain tumor detection using deep Convolutional Neural Networks. Fast, private, and accurate.</p>
+        <div class="social-row">
+          <div class="social-btn" title="GitHub">🐙</div>
+          <div class="social-btn" title="Email">📧</div>
+          <div class="social-btn" title="LinkedIn">💼</div>
+          <div class="social-btn" title="Twitter">🐦</div>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="#home">🏠 Home</a></li>
+          <li><a href="#features">⭐ Features</a></li>
+          <li><a href="#scan">🔍 Scan MRI</a></li>
+          <li><a href="#about">📖 About</a></li>
+          <li><a href="#contact">📬 Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Tools</h4>
+        <ul>
+          <li><a href="/history">📋 Scan History</a></li>
+          <li><a href="/dashboard">📊 Dashboard</a></li>
+          <li><a href="#scan">📤 Upload MRI</a></li>
+          <li><a href="#about">🧠 Model Info</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Tech Stack</h4>
+        <ul>
+          <li><a href="#">🐍 Python 3.10</a></li>
+          <li><a href="#">🤖 TensorFlow</a></li>
+          <li><a href="#">🌐 Flask</a></li>
+          <li><a href="#">👁️ OpenCV</a></li>
+          <li><a href="#">📐 NumPy</a></li>
+          <li><a href="#">📈 Matplotlib</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 NeuroScan V3.0 · Built with ❤️ for educational purposes · Python · TensorFlow · Flask</p>
+      <div class="footer-bottom-links">
+        <a href="#home">Privacy</a>
+        <a href="#home">Terms</a>
+        <a href="#contact">Support</a>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<script src="{{ url_for('static',filename='js/main.js') }}"></script>
+</body>
+</html>

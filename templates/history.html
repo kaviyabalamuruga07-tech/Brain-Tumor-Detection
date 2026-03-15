@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>History — NeuroScan V3.0</title>
+<link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}"/>
+</head>
+<body>
+<nav class="navbar scrolled" id="navbar">
+  <div class="nav-brand">
+    <div class="brand-logo">🧠</div>
+    <span class="brand-name">NeuroScan</span>
+    <span class="brand-tag">V3.0</span>
+  </div>
+  <ul class="nav-menu" id="navMenu">
+    <li><a href="/">Home</a></li>
+    <li><a href="/#features">Features</a></li>
+    <li><a href="/#scan">Scan</a></li>
+    <li><a href="/#about">About</a></li>
+    <li><a href="/#contact">Contact</a></li>
+    <li><a href="/history" class="active">History</a></li>
+    <li><a href="/dashboard">Dashboard</a></li>
+    <li><a href="/#scan" class="nav-cta">🔍 Scan Now</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="page-wrap">
+  <div class="page-inner">
+
+    <div style="font-size:13px;color:var(--muted);margin-bottom:16px">
+      <a href="/" style="color:var(--primary)">Home</a> → Scan History
+    </div>
+
+    <h1 class="page-title">📋 Scan History</h1>
+    <p class="page-sub">All previous MRI scan results · Last 50 records</p>
+
+    <div class="mini-stats">
+      <div class="ms-card"><div class="ms-num">{{ stats.total }}</div><div class="ms-lbl">Total Scans</div></div>
+      <div class="ms-card"><div class="ms-num" style="color:var(--danger)">{{ stats.tumors }}</div><div class="ms-lbl">Tumors Found</div></div>
+      <div class="ms-card"><div class="ms-num" style="color:var(--success)">{{ stats.normal }}</div><div class="ms-lbl">Normal Scans</div></div>
+      <div class="ms-card"><div class="ms-num">{{ stats.avg_conf }}%</div><div class="ms-lbl">Avg Confidence</div></div>
+    </div>
+
+    <div class="table-card">
+      {% if records %}
+      <table class="hist-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>File Name</th>
+            <th>Result</th>
+            <th>Confidence</th>
+            <th>Risk Level</th>
+            <th>Date & Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in records %}
+          <tr>
+            <td style="color:var(--muted)">{{ loop.index }}</td>
+            <td>{{ r.filename[:28] }}{% if r.filename|length > 28 %}...{% endif %}</td>
+            <td>
+              <span class="tbl-badge {% if r.label=='tumor' %}badge-red{% else %}badge-green{% endif %}">
+                {% if r.label=='tumor' %}⚠️ Tumor{% else %}✅ Normal{% endif %}
+              </span>
+            </td>
+            <td><strong>{{ r.confidence }}%</strong></td>
+            <td style="color:var(--muted2)">{{ r.risk_level }}</td>
+            <td style="color:var(--muted)">{{ r.timestamp }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-state">
+        <div class="e-icon">🔬</div>
+        <p>No scan history yet. Upload your first MRI scan!</p>
+        <a href="/#scan" class="btn-primary">Upload MRI →</a>
+      </div>
+      {% endif %}
+    </div>
+
+    <div style="margin-top:20px;display:flex;gap:12px">
+      <a href="/" class="btn-primary">← Back to Home</a>
+      <a href="/dashboard" class="btn-outline">📊 Dashboard</a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-bottom">
+      <p>© 2026 NeuroScan V3.0 · Educational Purpose Only</p>
+      <div class="footer-bottom-links">
+        <a href="/">Home</a><a href="/history">History</a><a href="/dashboard">Dashboard</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script src="{{ url_for('static',filename='js/main.js') }}"></script>
+</body>
+</html>

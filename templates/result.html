@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Medical Report — NeuroScan V3.0</title>
+<link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}"/>
+<style>
+.med-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:20px}
+.med-section h3{font-size:18px;font-weight:700;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.action-list{list-style:none}
+.action-list li{display:flex;align-items:flex-start;gap:12px;padding:10px 14px;border-radius:9px;margin-bottom:8px;font-size:14px;line-height:1.5}
+.action-list li.urgent{background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.15);color:#fca5a5}
+.action-list li.ok{background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.15);color:#86efac}
+.action-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+.num-red{background:rgba(239,68,68,0.2);color:var(--danger)}
+.num-green{background:rgba(34,197,94,0.2);color:var(--success)}
+.med-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.med-card{background:rgba(0,196,180,0.04);border:1px solid rgba(0,196,180,0.15);border-radius:12px;padding:18px;transition:all 0.2s}
+.med-card:hover{border-color:var(--primary);transform:translateY(-2px)}
+.med-name{font-size:15px;font-weight:700;color:var(--primary);margin-bottom:6px}
+.med-type{display:inline-block;font-size:10px;font-weight:700;background:rgba(0,196,180,0.12);color:var(--primary);padding:2px 9px;border-radius:100px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.med-use{font-size:13px;color:var(--muted2);margin-bottom:8px;line-height:1.5}
+.med-dose{font-size:12px;color:var(--warn);background:rgba(245,158,11,0.08);padding:5px 10px;border-radius:6px}
+.treat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.treat-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center;transition:all 0.2s}
+.treat-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.treat-icon{font-size:32px;margin-bottom:10px}
+.treat-name{font-size:14px;font-weight:700;margin-bottom:6px}
+.treat-desc{font-size:12px;color:var(--muted2);line-height:1.5}
+.test-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.test-item{display:flex;align-items:center;gap:10px;background:rgba(59,130,246,0.05);border:1px solid rgba(59,130,246,0.15);border-radius:9px;padding:12px 15px;font-size:13px;color:var(--muted2)}
+.test-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;flex-shrink:0}
+.warn-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.warn-item{display:flex;align-items:center;gap:10px;background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.15);border-radius:9px;padding:12px 15px;font-size:13px;color:#fca5a5}
+.life-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.life-item{display:flex;align-items:center;gap:10px;background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.15);border-radius:9px;padding:12px 15px;font-size:13px;color:#86efac}
+@media(max-width:640px){.med-grid,.test-grid,.warn-grid,.life-grid{grid-template-columns:1fr}.treat-grid{grid-template-columns:1fr}}
+@media print{.navbar,.result-actions,footer,.no-print{display:none!important}body{background:white!important;color:black!important}.result-page{padding:20px!important}.med-card,.treat-card,.test-item,.warn-item,.life-item,.action-list li{border:1px solid #ccc!important;background:white!important;color:black!important}.med-section{border:1px solid #ccc!important;page-break-inside:avoid}}
+</style>
+</head>
+<body>
+
+<nav class="navbar scrolled">
+  <div class="nav-brand">
+    <div class="brand-logo">🧠</div>
+    <span class="brand-name">NeuroScan</span>
+    <span class="brand-tag">V3.0</span>
+  </div>
+  <ul class="nav-menu" id="navMenu">
+    <li><a href="/">Home</a></li>
+    <li><a href="/#scan">Scan</a></li>
+    <li><a href="/history">History</a></li>
+    <li><a href="/dashboard">Dashboard</a></li>
+    <li><a href="/#scan" class="nav-cta">🔍 New Scan</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="result-page">
+<div class="result-page-inner">
+
+  <div style="font-size:13px;color:var(--muted);margin-bottom:20px">
+    <a href="/" style="color:var(--primary)">Home</a> → Medical Report
+  </div>
+
+  <h1 style="font-size:28px;margin-bottom:4px">📊 Full Medical Report</h1>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:24px">{{ timestamp }} &nbsp;·&nbsp; CNN V3.0 &nbsp;·&nbsp; 150×150px</p>
+
+  <!-- BIG RESULT -->
+  <div class="result-hero-card {% if label=='tumor' %}tumor-result{% else %}normal-result{% endif %}">
+    <span class="res-emoji">{% if label=='tumor' %}⚠️{% else %}✅{% endif %}</span>
+    <h2 class="res-title">{{ result }}</h2>
+    <span class="res-risk risk-{% if label=='tumor' %}high{% else %}low{% endif %}">🎯 {{ risk_level }}</span>
+    <div class="conf-wrap">
+      <div class="conf-label">Model Confidence</div>
+      <div class="conf-bar-bg"><div class="conf-bar-fill" style="width:{{ confidence }}%"></div></div>
+      <div class="conf-pct">{{ confidence }}%</div>
+    </div>
+  </div>
+
+  <!-- MRI + PROBABILITY -->
+  <div class="result-grid">
+    <div class="res-card">
+      <h3>📷 Uploaded MRI Scan</h3>
+      <div class="mri-wrap">
+        <img src="{{ url_for('uploaded_file',filename=image_filename) }}" alt="MRI"/>
+      </div>
+      <div class="mri-fname">📎 {{ image_filename }}</div>
+    </div>
+    <div class="res-card">
+      <h3>📊 Probability Analysis</h3>
+      <div class="prob-row"><span>🔴 Tumor Probability</span><span class="prob-val-r">{{ tumor_prob }}%</span></div>
+      <div class="prob-bar-bg"><div class="pb-red" style="width:{{ tumor_prob }}%"></div></div>
+      <div class="prob-row"><span>🟢 Normal Probability</span><span class="prob-val-g">{{ normal_prob }}%</span></div>
+      <div class="prob-bar-bg"><div class="pb-green" style="width:{{ normal_prob }}%"></div></div>
+      <div class="details-list">
+        <div class="dl-row"><span class="dl-k">Diagnosis</span><span class="dl-v {% if label=='tumor' %}dl-r{% else %}dl-g{% endif %}">{{ result }}</span></div>
+        <div class="dl-row"><span class="dl-k">Confidence</span><span class="dl-v">{{ confidence }}%</span></div>
+        <div class="dl-row"><span class="dl-k">Risk Level</span><span class="dl-v">{{ risk_level }}</span></div>
+        <div class="dl-row"><span class="dl-k">Timestamp</span><span class="dl-v">{{ timestamp }}</span></div>
+        <div class="dl-row"><span class="dl-k">Model</span><span class="dl-v">CNN V3.0 + CLAHE</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MEDICINE REPORT ═══ -->
+  <div style="border-top:2px solid var(--primary);padding-top:28px;margin:8px 0 20px">
+    <h2 style="font-size:24px;font-weight:800;margin-bottom:4px">
+      {% if label=='tumor' %}🏥{% else %}💊{% endif %} Medical Report & Recommendations
+    </h2>
+    <p style="color:var(--muted2);font-size:14px">Based on AI analysis · Always consult a licensed doctor before taking any medication</p>
+  </div>
+
+  <!-- 1. IMMEDIATE ACTIONS -->
+  <div class="med-section">
+    <h3>{% if label=='tumor' %}🚨{% else %}✅{% endif %} Immediate Actions Required</h3>
+    <ul class="action-list">
+      {% for action in medicine.immediate_actions %}
+      <li class="{% if label=='tumor' %}urgent{% else %}ok{% endif %}">
+        <span class="action-num {% if label=='tumor' %}num-red{% else %}num-green{% endif %}">{{ loop.index }}</span>
+        {{ action }}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  {% if label == 'tumor' %}
+  <!-- 2. DIAGNOSTIC TESTS -->
+  <div class="med-section">
+    <h3>🔬 Recommended Diagnostic Tests</h3>
+    <div class="test-grid">
+      {% for test in medicine.diagnostic_tests %}
+      <div class="test-item"><span class="test-dot"></span>{{ test }}</div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- 3. MEDICATIONS -->
+  <div class="med-section">
+    <h3>💊 {% if label=='tumor' %}Medications Used in Treatment{% else %}Recommended Health Supplements{% endif %}</h3>
+    <div style="background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.2);border-radius:9px;padding:12px 16px;margin-bottom:18px;font-size:13px;color:#fcd34d">
+      ⚠️ <strong>Important:</strong> All medications must be prescribed and supervised by a qualified doctor. Do NOT self-medicate.
+    </div>
+    <div class="med-grid">
+      {% for med in medicine.medications %}
+      <div class="med-card">
+        <div class="med-name">{{ med.name }}</div>
+        <span class="med-type">{{ med.type }}</span>
+        <div class="med-use">{{ med.use }}</div>
+        <div class="med-dose">Dose: {{ med.dose }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% if label == 'tumor' %}
+  <!-- 4. TREATMENTS -->
+  <div class="med-section">
+    <h3>🏥 Available Treatment Options</h3>
+    <div class="treat-grid">
+      {% for treat in medicine.treatments %}
+      <div class="treat-card">
+        <div class="treat-icon">{{ treat.icon }}</div>
+        <div class="treat-name">{{ treat.name }}</div>
+        <div class="treat-desc">{{ treat.desc }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- 5. LIFESTYLE -->
+  <div class="med-section">
+    <h3>🌿 Lifestyle Recommendations</h3>
+    <div class="life-grid">
+      {% for tip in medicine.lifestyle %}
+      <div class="life-item"><span>✅</span>{{ tip }}</div>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% if label == 'tumor' %}
+  <!-- 6. WARNING SIGNS -->
+  <div class="med-section">
+    <h3>🚨 Emergency Warning Signs — Go to Hospital Immediately</h3>
+    <div class="warn-grid">
+      {% for sign in medicine.warning_signs %}
+      <div class="warn-item"><span>🔴</span>{{ sign }}</div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- DISCLAIMER -->
+  <div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:12px;padding:20px 24px;margin-bottom:24px">
+    <h4 style="color:#fcd34d;margin-bottom:8px;font-size:15px">⚠️ Medical Disclaimer</h4>
+    <p style="font-size:13px;color:var(--muted2);line-height:1.7">
+      This report is generated by an AI model for <strong>educational purposes only</strong>.
+      It is NOT a substitute for professional medical advice, diagnosis, or treatment.
+      Always seek the advice of a qualified physician or neurologist for any medical condition.
+    </p>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="result-actions no-print">
+    <a href="/#scan" class="btn-act-primary">🔄 Analyze Another Scan</a>
+    <a href="/history" class="btn-act-outline">📋 View History</a>
+    <a href="/dashboard" class="btn-act-outline">📊 Dashboard</a>
+    <button onclick="window.print()" class="btn-act-outline">🖨️ Print Full Report</button>
+  </div>
+
+</div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-disclaimer">⚠️ <strong>Medical Disclaimer:</strong> NeuroScan is educational only. Always consult a licensed doctor.</div>
+    <div class="footer-bottom">
+      <p>© 2026 NeuroScan V3.0 · Educational Purpose Only · Python · TensorFlow · Flask</p>
+      <div class="footer-bottom-links"><a href="/">Home</a><a href="/history">History</a><a href="/dashboard">Dashboard</a></div>
+    </div>
+  </div>
+</footer>
+<script src="{{ url_for('static',filename='js/main.js') }}"></script>
+</body>
+</html>
